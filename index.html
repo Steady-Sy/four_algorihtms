@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>四则运算</title>
+    <link rel="stylesheet" href="static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        p{
+            margin: 0;
+        }
+        .my-btn{
+            background-color: rgba(0,122,255,0.7);
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            right: 200px;
+            top: 40%;
+            border:none;
+            font-size: 18px;
+            outline: none;
+            box-shadow: 3px 3px 10px #bbb;
+            color: rgba(255,255,255,0.9);
+
+        }
+		.your-btn{
+			background-color: rgba(0,122,255,0.7);
+			position: fixed;
+			width: 150px;
+			height: 150px;
+			border-radius: 50%;
+			right: 200px;
+			top: 10%;
+			border:none;
+			font-size: 18px;
+			outline: none;
+			box-shadow: 3px 3px 10px #bbb;
+			color: rgba(255,255,255,0.9);
+		}
+        .my-btn:hover{
+            cursor: pointer;
+            box-shadow: 0 0 20px #2A8FBD;
+            transition:box-shadow 1s ;
+
+        }
+		.your-btn:hover{
+			cursor: pointer;
+			box-shadow: 0 0 20px #2A8FBD;
+			transition:box-shadow 1s ;
+		}
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="box col-xs-8">
+            <table class="table">
+                <thead>
+                    <th>题目</th>
+                    <th>答案</th>
+                    <th>结果</th>
+                    <th>参考答案</th>
+                </thead>
+                <tbody class="insert">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+	<button class="btn-submit1 your-btn">保存试题</button>
+    <button class="btn-submit my-btn">提交答案</button>
+    <button class="btn-refresh my-btn" style="display: none" onclick="location.reload();">
+        <span class="glyphicon glyphicon-refresh" style="color: #ffffff;vertical-align: text-top"></span>
+        再来十题</button>
+</body>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="static/layer/layer.js"></script>
+<script src="js/calculate.js"></script>
+<script src="js/Fraction.js"></script>
+<script src="js/create.js"></script>
+<script>
+    var question,answer;
+    $(function () {
+        init();
+        $('.btn-submit').on('click',submit);
+    });
+    function init(){
+        var result = create(10);
+        question = result[0];
+        answer = result[1];
+        var html = '';
+        for(var i=0;i<question.length;i++){
+            html += '<tr>' +
+                    '<td>'+question[i]+'=</td>' +
+                    '<td><input type="text" class="answer"/></td>' +
+                    '<td class="result"></td>' +
+                    '<td class="right"></td>' +
+                    '</tr>';
+        }
+        $('.insert').empty().append(html);
+    }
+    function submit() {
+        layer.confirm("您确定要提交答案？",{
+            btn:['确定','取消']
+        },function () {
+            layer.closeAll();
+            $('.answer').each(function (index,value) {
+                var current = $('.answer').eq(index).val();
+                var html = '';
+                if(current == answer[index]){
+                    html = '<span class="glyphicon glyphicon-ok" style="color: #007aff"></span>';
+                }else{
+                    html = '<span class="glyphicon glyphicon-remove" style="color: red"></span>';
+                }
+                var right = '<span style="color: #ccc">'+answer[index]+'</span>';
+                $('.right').eq(index).empty().append(right);
+                $('.result').eq(index).empty().append(html);
+            });
+            $('.btn-submit').hide();
+            $('.btn-refresh').show();
+        },function () {
+            layer.closeAll();
+        });
+    }
+</script>
+</html>
